@@ -1,0 +1,32 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at https://mozilla.org/MPL/2.0/. -->
+
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <RuntimeIdentifiers>win</RuntimeIdentifiers>
+    <OutputType>Library</OutputType>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+    <DebugSymbols>False</DebugSymbols>
+    <DebugType>None</DebugType>
+    <BuildScriptPath>$(MSBuildThisFileDirectory)build.ps1</BuildScriptPath>
+    <Configuration>Release</Configuration>
+    <VerboseFlag Condition="'$(Verbosity)' == 'diag'">-Verbose</VerboseFlag>
+    <EnableInstall Condition="'$(EnableInstall)' == ''">false</EnableInstall>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Library.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="PowerShellStandard.Library" Version="5.1.1" />
+  </ItemGroup>
+  <Target Name="FinalizePublish" DependsOnTargets="Publish" AfterTargets="Publish">
+    <Exec Command="pwsh.exe -NoProfile -ExecutionPolicy Bypass -File $(BuildScriptPath) -Action Build -PublishDir $(PublishDir) -Configuration $(Configuration) $(VerboseFlag) 2>&amp;1" StandardOutputImportance="High" />
+    <Exec Condition=" '$(EnableInstall.ToLower())' == 'true' " Command="pwsh.exe -NoProfile -ExecutionPolicy Bypass -File $(BuildScriptPath) -Action Install -PublishDir $(PublishDir) -Configuration $(Configuration) -InstallPath &quot;$(InstallPath)&quot; $(VerboseFlag) 2>&amp;1" StandardOutputImportance="High" />
+    <MSBuild Projects="$(MSBuildThisFileFullPath)" Targets="Clean" Properties="Configuration=$(Configuration)" />
+  </Target>
+</Project>

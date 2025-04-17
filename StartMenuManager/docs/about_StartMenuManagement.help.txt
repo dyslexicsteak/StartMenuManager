@@ -1,0 +1,74 @@
+TOPIC
+    about_StartMenuManagement
+
+SHORT DESCRIPTION
+    Techniques and concepts for managing the Windows Start Menu.
+
+LONG DESCRIPTION
+    The Start Menu lives in the
+    `Microsoft.Windows.StartMenuExperienceHost_cw5n1h2txyewy` app directory
+    located in `Windows\SystemApps`. Disabling the Start Menu can be achieved by
+    terminating the `StartMenuExperienceHost` process, which is an instance of
+    the program `StartMenuExperienceHost.exe` responsible for the Start Menu.
+    The `explorer.exe` shell continuously attempts to restart this process by a
+    hard-coded path to it in the app directory; by renaming or deleting the
+    directory, the shell is unable to recognize the directory and consequently
+    locate and restart the process. Enabling the Start Menu after making
+    `explorer.exe` unable to locate the program simply involves restoring the
+    original directory name, as `explorer.exe` will automatically restart the
+    process once the directory is valid again.
+
+    This method involves dealing with a race condition between terminating the
+    `StartMenuExperienceHost` process and renaming the directory. The
+    `explorer.exe` shell is designed to monitor and restart certain processes
+    like `StartMenuExperienceHost` almost immediately after they are terminated.
+    This means that even after successfully terminating the process,
+    `explorer.exe` may restart it before we are able to rename the directory;
+    this requires repeated termination of `StartMenuExperienceHost` followed by
+    an attempt to rename before the process is restarted by `explorer.exe` and
+    re-establishes a lock on the directory.
+
+    In some cases, `explorer.exe` itself retains a lock on the
+    `Microsoft.Windows.StartMenuExperienceHost_cw5n1h2txyewy` directory, even
+    after the `StartMenuExperienceHost` process has been terminated. When this
+    occurs, attempts to rename or delete the directory will fail due to the
+    active lock held by `explorer.exe`. Resolving this issue by terminating
+    `explorer.exe` is a potential solution, though it temporarily disrupts the
+    desktop environment.
+
+    An alternative approach to disabling the Start Menu involves modifying the
+    security permissions of the `StartMenuExperienceHost.exe` executable itself.
+    By removing all permissions from the executable, the system is effectively
+    prevented from executing the program, which disables the Start Menu. This
+    method bypasses the race condition associated with renaming the directory,
+    as the executable remains in place but cannot be launched. To re-enable the
+    Start Menu after this, permissions can be restored to allow execution of
+    `StartMenuExperienceHost.exe`.
+
+EXAMPLES
+    Disabling the Start Menu can be achieved by either renaming the
+    `Microsoft.Windows.StartMenuExperienceHost_cw5n1h2txyewy` directory or
+    modifying the permissions of the `StartMenuExperienceHost.exe` executable to
+    remove execution rights. Enabling the Start Menu reverses these steps by
+    restoring the original directory name or permissions.
+
+NOTE
+    Administrative privileges are required for these operations. These
+    techniques rely on the internal structure of the `SystemApps` folder. The
+    `explorer.exe` shell is responsible for managing the Start Menu and related
+    desktop components. Be aware of the race condition and potential locks held
+    by `explorer.exe` when performing these operations. When modifying
+    permissions, ensure you have a way to restore them if needed.
+
+TROUBLESHOOTING
+    If renaming the directory fails, ensure no processes are actively using it.
+    Verify that the user has administrative privileges.
+
+SEE ALSO
+    - File Locksmith (PowerToys)
+    - Windows Permissions Overview
+
+KEYWORDS
+    - Start Menu
+    - Windows Processes
+    - Permissions

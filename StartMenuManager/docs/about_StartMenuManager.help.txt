@@ -1,0 +1,59 @@
+TOPIC
+    about_StartMenuManager
+
+SHORT DESCRIPTION
+    Overview of the StartMenuManager PowerShell module, its cmdlets, licensing,
+    and how to obtain its source code.
+
+LONG DESCRIPTION
+    StartMenuManager is a PowerShell module designed to help users manage the
+    Windows Start Menu through a set of dedicated cmdlets. The module provides
+    a streamlined way to enable, disable, toggle, and check the state of the
+    Start Menu without manual intervention.
+
+    StartMenuManager ships with four cmdlets:
+      - Enable-StartMenu: Enables the Windows Start Menu if it has been disabled.
+      - Disable-StartMenu: Disables the Windows Start Menu.
+      - Invoke-ToggleStartMenu: Toggles the Start Menu between enabled and
+        disabled states.
+      - Get-StartMenuEnabled: Reports whether the Start Menu is currently
+        enabled.
+
+    These cmdlets are designed to be scriptable, idempotent, and reversible.
+
+    StartMenuManager is licensed under the Mozilla Public License 2.0 (MPL 2.0),
+    which allows you to use, modify, and distribute the software under its terms.
+
+    The full source code for StartMenuManager is available on GitHub.
+
+EXAMPLES
+    To disable the Start Menu:
+        Disable-StartMenu
+
+    To enable the Start Menu:
+        Enable-StartMenu
+
+    To toggle the Start Menu:
+        Invoke-ToggleStartMenu
+
+    To check if the Start Menu is enabled:
+        Get-StartMenuEnabled
+
+NOTE
+    Administrative privileges are required to enable, disable, or toggle the
+    start menu. Always review the documentation for each cmdlet before use.
+
+TROUBLESHOOTING
+    If a cmdlet fails, ensure the module is loaded and that you are running a
+    compatible version of PowerShell with the necessary permissions. Create an
+    issue on GitHub if you require further assistance.
+
+SEE ALSO
+    - StartMenuManager GitHub Repository:
+        https://github.com/dyslexicsteak/StartMenuManager
+    - Mozilla Public License 2.0:
+        https://www.mozilla.org/en-US/MPL/2.0/
+
+KEYWORDS
+    - Start Menu
+    - PowerShell Module
