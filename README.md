@@ -194,4 +194,4 @@ Get-StartMenuEnabled
 
 ## License
 
-MIT License. See [LICENSE](https://opensource.org/licenses/MIT) for details.
+MPL 2.0 License, see [License Text](https://www.mozilla.org/en-US/MPL/2.0/) or LICENSE.txt for more details.
