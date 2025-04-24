@@ -1,6 +1,6 @@
 # StartMenuManager
 
-StartMenuManager is a PowerShell module for managing the Windows Start Menu, written in F#. It provides cmdlets to enable, disable, toggle, and query the state of the Start Menu.
+StartMenuManager is a PowerShell module for managing the Windows Start Menu written in F#. It provides cmdlets to enable, disable, toggle, and query the state of the Start Menu.
 
 ## Table of Contents
 
@@ -11,6 +11,8 @@ StartMenuManager is a PowerShell module for managing the Windows Start Menu, wri
     - [Details](#details)
   - [Build and Install Instructions](#build-and-install-instructions)
     - [Requirements](#requirements)
+      - [Build Requirements](#build-requirements)
+      - [Usage Requirements](#usage-requirements)
     - [Quick Start (Recommended)](#quick-start-recommended)
       - [Build Only (default)](#build-only-default)
       - [Build and Install (in one step)](#build-and-install-in-one-step)
@@ -64,7 +66,14 @@ StartMenuManager is a PowerShell module for managing the Windows Start Menu, wri
 
 ### Requirements
 
+#### Build Requirements
+
 - [.NET 9.0 SDK](https://dotnet.microsoft.com/download/dotnet/9.0)
+- PowerShell 5.1+ or PowerShell Core
+- PlatyPS (optional, to build documentation)
+
+#### Usage Requirements
+
 - PowerShell 5.1+ or PowerShell Core
 - Windows OS
 
@@ -89,9 +98,11 @@ To build and install the module to your PowerShell modules folder (or a custom p
 dotnet publish -p:EnableInstall=true
 ```
 
-- **Default install path:**
-  If not specified, the install path is:
-  `"$HOME/Documents/PowerShell/Modules/StartMenuManager/"` (for the current user)
+- **Default install path:** If not specified, the install path is:
+  `"MyDocuments/PowerShell/Modules/StartMenuManager/"` (for the current user).
+  Using MyDocuments as reported by
+  `[Environment]::GetFolderPath([Environment+SpecialFolder]::MyDocuments)`, you
+  can execute this in PowerShell to identify this path for your user.
 
 To specify a custom install path:
 
@@ -125,6 +136,7 @@ You can also invoke the build script directly bypassing MSBuild:
 | `-Configuration` | No       | The build configuration to use. Defaults to `Release`.                                        | `Release` or `Debug`                                        |
 
 **Example usage:**
+
 ```sh
 pwsh -NoProfile -ExecutionPolicy Bypass -File StartMenuManager/build.ps1 -Action Build -PublishDir StartMenuManager/bin/Release/net9.0/publish -Configuration Release
 ```
@@ -190,7 +202,7 @@ Get-StartMenuEnabled
 ## Troubleshooting
 
 - If install fails, check that you have write permissions to the install path.
-- For verbose output, use `-v diag` or `-p:Verbosity=diag` with `dotnet publish`.
+- For verbose output, use `-v diag`, `--verbosity diag`, or `-p:Verbosity=diag` with `dotnet publish`.
 
 ## License
 

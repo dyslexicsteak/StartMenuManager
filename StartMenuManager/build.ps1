@@ -54,10 +54,14 @@ function Build {
         Copy-Item -Path $_.FullName -Destination $outputDocRoot -Force
     }
 
-    # Generate external help from markdown directory
     if (Test-Path $markdownDir) {
-        Write-Verbose "Generating external help from markdown directory $markdownDir"
-        New-ExternalHelp -Path $markdownDir -OutputPath $outputDocRoot -Force
+        if (Get-Command -Name New-ExternalHelp -ErrorAction SilentlyContinue) {
+            Write-Verbose "Generating external help from markdown directory $markdownDir"
+            New-ExternalHelp -Path $markdownDir -OutputPath $outputDocRoot -Force
+        }
+        else {
+            Write-Verbose "PlatyPS (New-ExternalHelp) is not installed. Only partial documentation will be available."
+        }
     }
     else {
         Write-Warning "Markdown directory $markdownDir does not exist. Skipping external help generation."
@@ -96,7 +100,8 @@ function Install {
         $modulePath = $InstallPath
     }
     else {
-        $modulePath = ($env:PSModulePath -split ';' | Where-Object { $_ -like "$env:USERPROFILE*" })[0] + "\StartMenuManager"
+        $modulePath = Join-Path ([Environment]::GetFolderPath([Environment+SpecialFolder]::MyDocuments)) "PowerShell\Modules\StartMenuManager"
+
     }
 
     if (-not (Test-Path $modulePath)) {
