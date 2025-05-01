@@ -54,11 +54,17 @@ EXAMPLES
 
 NOTE
     Administrative privileges are required for these operations. These
-    techniques rely on the internal structure of the `SystemApps` folder. The
+    techniques rely on the internal structure of the `SystemApps` directory. The
     `explorer.exe` shell is responsible for managing the Start Menu and related
     desktop components. Be aware of the race condition and potential locks held
     by `explorer.exe` when performing these operations. When modifying
     permissions, ensure you have a way to restore them if needed.
+
+    Later versions of Windows come with an `explorer.exe` which performs a prefix
+    search for the `Microsoft.Windows.StartMenuExperienceHost_cw5n1h2txyewy`
+    directory, and are able to copy it without the prefix into the `SystemApps`
+    directory and thus reenable the Start menu after pressing the button a few
+    times.
 
 TROUBLESHOOTING
     If renaming the directory fails, ensure no processes are actively using it.
