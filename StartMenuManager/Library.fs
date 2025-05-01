@@ -11,27 +11,38 @@ open System.Management.Automation
 open System.Security.Principal
 
 module Cmdlets =
+    [<Literal>]
+    let SystemAppsFolderName = "SystemApps"
+
+    [<Literal>]
+    let MenuHostFolderName = "Microsoft.Windows.StartMenuExperienceHost_cw5n1h2txyewy"
+
+    [<Literal>]
+    let DisabledMenuHostFolderName = "disabled_Microsoft.Windows.StartMenuExperienceHost_cw5n1h2txyewy"
+
+    let windowsFolderPath =
+        Environment.GetFolderPath Environment.SpecialFolder.Windows
+
+    let sysAppsPath =
+        Path.Combine(windowsFolderPath, SystemAppsFolderName)
+
+    let menuHostPath =
+        Path.Combine(sysAppsPath, MenuHostFolderName)
+
+    let disabledMenuHostPath =
+        Path.Combine(sysAppsPath, DisabledMenuHostFolderName)
+
     [<Struct>]
     type RenameError =
         | Failed of Exception
         | Unauthorized of Exception
         | Unexpected of Exception
 
-
     [<Struct>]
     type TerminationError =
         | InvalidOp of id: int * ex: Exception
         | Unauthorized of id: int * ex: Exception
         | Unexpected of id: int * ex: Exception
-
-    let sysAppsPath =
-        Path.Combine(Environment.GetFolderPath Environment.SpecialFolder.Windows, "SystemApps")
-
-    let menuHostPath =
-        Path.Combine(sysAppsPath, "Microsoft.Windows.StartMenuExperienceHost_cw5n1h2txyewy")
-
-    let disabledMenuHostPath =
-        Path.Combine(sysAppsPath, "Microsoft.Windows.StartMenuExperienceHost_cw5n1h2txyewy_disabled")
 
     let isAdmin () =
         try
